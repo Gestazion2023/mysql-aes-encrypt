@@ -11,7 +11,7 @@ if (!function_exists('AESEncrypt\mysqldecrypt')) {
      */
     function mysqldecrypt($column, $alias = null)
     {
-        return "AES_DECRYPT(SUBSTRING_INDEX({$column}, '.iv.', 1), '" . config('aesEncrypt.key') ."', SUBSTRING_INDEX({$column}, '.iv.', -1)) as `" . ($alias ? $alias : $column) . "`";
+        return "AES_DECRYPT(SUBSTRING_INDEX({$column}, '.iv.', 1), '" . config('aes-encrypt.key') ."', SUBSTRING_INDEX({$column}, '.iv.', -1)) as `" . ($alias ? $alias : $column) . "`";
     }
 }
 
@@ -25,6 +25,6 @@ if (!function_exists('AESEncrypt\mysqlencrypt')) {
     function mysqlencrypt($column, $alias = null)
     {
         $iv = bin2hex(random_bytes(16));
-        return "CONCAT(AES_ENCRYPT({$column}, '" . config('aesEncrypt.key') ."', '{$iv}'), '.iv.','{$iv}') as `" . ($alias ? $alias : $column) . "`";
+        return "CONCAT(AES_ENCRYPT({$column}, '" . config('aes-encrypt.key') ."', '{$iv}'), '.iv.','{$iv}') as `" . ($alias ? $alias : $column) . "`";
     }
 }

@@ -1,12 +1,12 @@
 <?php
 
-namespace redsd\AESEncrypt\Database\Connectors;
+namespace Gestazion\AESEncrypt\Database\Connectors;
 
 use Illuminate\Database\Connectors\ConnectionFactory;
 
 use InvalidArgumentException;
 use Illuminate\Database\Connection;
-use redsd\AESEncrypt\Database\MySqlConnectionEncrypt;
+use Gestazion\AESEncrypt\Database\MySqlConnectionEncrypt;
 use Illuminate\Database\SQLiteConnection;
 use Illuminate\Database\PostgresConnection;
 use Illuminate\Database\SqlServerConnection;
@@ -25,8 +25,13 @@ class ConnectionFactoryEncrypt extends ConnectionFactory
      *
      * @throws \InvalidArgumentException
      */
-    protected function createConnection($driver, $connection, $database, $prefix = '', array $config = [])
-    {
+    protected function createConnection(
+        $driver,
+        $connection,
+        $database,
+        $prefix = '',
+        array $config = []
+    ) {
         if ($resolver = Connection::getResolver($driver)) {
             return $resolver($connection, $database, $prefix, $config);
         }
@@ -40,8 +45,8 @@ class ConnectionFactoryEncrypt extends ConnectionFactory
                 return new SQLiteConnection($connection, $database, $prefix, $config);
             case 'sqlsrv':
                 return new SqlServerConnection($connection, $database, $prefix, $config);
+            default:
+                throw new InvalidArgumentException("Unsupported driver [{$driver}]");
         }
-
-        throw new InvalidArgumentException("Unsupported driver [$driver]");
     }
 }

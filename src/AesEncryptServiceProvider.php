@@ -1,11 +1,10 @@
 <?php
 
-namespace redsd\AESEncrypt;
+namespace Gestazion\AESEncrypt;
 
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\ServiceProvider;
-use redsd\AESEncrypt\Database\Connectors\ConnectionFactoryEncrypt;
-
+use Gestazion\AESEncrypt\Database\Connectors\ConnectionFactoryEncrypt;
 
 class AesEncryptServiceProvider extends ServiceProvider
 {
@@ -24,7 +23,7 @@ class AesEncryptServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__.'/config/aesEncrypt.php' => config_path('aesEncrypt.php'),
+            __DIR__.'/config/aes-encrypt.php' => config_path('aes-encrypt.php'),
         ], 'config');
     }
 
@@ -36,8 +35,8 @@ class AesEncryptServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom(
-            __DIR__.'/config/aesEncrypt.php',
-            'aesEncrypt'
+            __DIR__.'/config/aes-encrypt.php',
+            'aes-encrypt'
         );
 
         // The connection factory is used to create the actual connection instances on

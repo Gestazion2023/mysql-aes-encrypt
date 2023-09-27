@@ -1,10 +1,10 @@
 <?php
 
-namespace redsd\AESEncrypt\Database\Eloquent;
+namespace Gestazion\AESEncrypt\Database\Eloquent;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
-use redsd\AESEncrypt\Database\Query\BuilderEncrypt as QueryBuilder;
+use Gestazion\AESEncrypt\Database\Query\BuilderEncrypt as QueryBuilder;
 
 abstract class ModelEncrypt extends Model
 {
@@ -38,8 +38,8 @@ abstract class ModelEncrypt extends Model
     {
         static $mysql_session_set;
         if (!isset($mysql_session_set)) {
-            $key = config('aesEncrypt.key');
-            $mode= config('aesEncrypt.mode');
+            $key = config('aes-encrypt.key');
+            $mode = config('aes-encrypt.mode');
             DB::statement("SET @@SESSION.block_encryption_mode = '{$mode}'");
             DB::statement(sprintf("SET @AESKEY = '%s'", $key));
             $mysql_session_set = true;
@@ -50,7 +50,7 @@ abstract class ModelEncrypt extends Model
     /**
      * Get a new query builder that doesn't have any global scopes.
      *
-     * @return \redsd\AESEncrypt\Database\Eloquent\BuilderEloquentEncrypt|static
+     * @return \Gestazion\AESEncrypt\Database\Eloquent\BuilderEloquentEncrypt|static
      */
     public function newQueryWithoutScopes()
     {
@@ -70,8 +70,8 @@ abstract class ModelEncrypt extends Model
     /**
      * Create a new Eloquent query builder for the model.
      *
-     * @param  \redsd\AESEncrypt\Database\Query\BuilderEncrypt   $query
-     * @return \redsd\AESEncrypt\Database\Eloquent\BuilderEloquentEncrypt|static
+     * @param  \Gestazion\AESEncrypt\Database\Query\BuilderEncrypt   $query
+     * @return \Gestazion\AESEncrypt\Database\Eloquent\BuilderEloquentEncrypt|static
      */
     public function newEloquentBuilder($query)
     {
@@ -81,7 +81,7 @@ abstract class ModelEncrypt extends Model
     /**
      * Get a new query builder instance for the connection.
      *
-     * @return \redsd\AESEncrypt\Database\Query\BuilderEncrypt
+     * @return \Gestazion\AESEncrypt\Database\Query\BuilderEncrypt
      */
     protected function newBaseQueryBuilder()
     {
@@ -92,11 +92,6 @@ abstract class ModelEncrypt extends Model
         );
     }
 
-    // /**
-    //  * Get the table associated with the model.
-    //  *
-    //  * @return string
-    //  */
     public function getfillableEncrypt()
     {
         return $this->fillableEncrypt;

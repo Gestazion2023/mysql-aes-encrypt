@@ -1,11 +1,11 @@
 <?php
 
-namespace redsd\AESEncrypt\Database\Query\Grammars;
+namespace Gestazion\AESEncrypt\Database\Query\Grammars;
 
 use Illuminate\Support\Str;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\JsonExpression;
-use redsd\AESEncrypt\Database\GrammarEncrypt;
+use Gestazion\AESEncrypt\Database\GrammarEncrypt;
 use InvalidArgumentException;
 
 class MySqlGrammarEncrypt extends GrammarEncrypt
@@ -16,14 +16,14 @@ class MySqlGrammarEncrypt extends GrammarEncrypt
 
     public function __construct()
     {
-        $this->AESENCRYPT_KEY = config('aesEncrypt.key');
-        $this->AESENCRYPT_MODE = config('aesEncrypt.mode');
+        $this->AESENCRYPT_KEY = config('aes-encrypt.key');
+        $this->AESENCRYPT_MODE = config('aes-encrypt.mode');
 
         if(empty($this->AESENCRYPT_KEY))
-            throw new InvalidArgumentException("Set encryption key in .env file, use this alias APP_AESENCRYPT_KEY");
+            throw new InvalidArgumentException("Set encryption key in .env file, use this alias APP_AES_ENCRYPT_KEY");
 
         if(empty($this->AESENCRYPT_MODE))
-            throw new InvalidArgumentException("Set encryption mode in .env file, use this alias APP_AESENCRYPT_MODE, we recommend using the default: aes-256-cbc");
+            throw new InvalidArgumentException("Set encryption mode in .env file, use this alias APP_AES_ENCRYPT_MODE, we recommend using the default: aes-256-cbc");
     }
 
     protected $columnsEncrypt = [];
@@ -122,7 +122,7 @@ class MySqlGrammarEncrypt extends GrammarEncrypt
     public function compileUpdate(Builder $query, $values)
     {
         $this->columnsEncrypt = [];
-        if($query instanceof \redsd\AESEncrypt\Database\Query\BuilderEncrypt) {
+        if($query instanceof \Gestazion\AESEncrypt\Database\Query\BuilderEncrypt) {
             $instance = "BuilderEncrypt";
             $this->columnsEncrypt = $query->getfillableEncrypt();
         }
@@ -361,7 +361,4 @@ class MySqlGrammarEncrypt extends GrammarEncrypt
     {
         return Str::contains($value, '->');
     }
-
-
-
 }

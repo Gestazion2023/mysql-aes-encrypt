@@ -1,20 +1,18 @@
+# Laravel MySql AES Encrypt/Decrypt
 * [Installation](#1install-the-package-via-composer)
-* [Configure Provider](#2configure-provider)
 * [Updating your Eloquent Models](#updating-your-eloquent-models)
 * [Creating tables to support encrypt columns](#creating-tables-to-support-encrypt-columns)
 * [Set encryption key in .env file](#set-encryption-key-in-env-file)
 * [Encrypt existing data](#encrypt-existing-data)
 * [Decrypt your data in MySQL](#decrypt-your-data-in-mySQL)
 
-
-# Laravel MySql AES Encrypt/Decrypt
+## Summary
 Based on https://github.com/devmaster10/mysql-aes-encrypt
 
 Improvements:
-- Added improved security by using an unique IV for each encrypted field.
-- Added support for multiple encryption methods including: aes-256-cbc
-- Added use of MySQL session variables to prevent the encryption key from being outputted when an sql error occures.
-- Added laravel 9 support
+- Added improved security by using a unique IV for each encrypted field.
+- Added support for multiple encryption methods including: aes-256-cbc.
+- Added use of MySQL session variables to prevent the encryption key from being outputted when a sql error occurs.
 
 Laravel Database Encryption in mysql side, use native mysql function AES_DECRYPT and AES_ENCRYPT<br>
 Auto encrypt and decrypt signed fields/columns in your Model<br>
@@ -25,28 +23,7 @@ You can perform the operations "=>, <',' between ',' LIKE ' in encrypted columns
 ## 1.Install the package via Composer:
 
 ```php
-For laravel 9.x:
-$ composer require redsd/aesencrypt:9.x
-
-For laravel 8.x:
-$ composer require redsd/aesencrypt:8.x
-
-For laravel 7.x:
-$ composer require redsd/aesencrypt:7.x
-
-For laravel 6.x:
-$ composer require redsd/aesencrypt:6.x
-
-For laravel 5.x:
-$ composer require redsd/aesencrypt:5.x
-```
-## 2.Configure provider
-You'll need to add to add a service provider if you are using Laravel 5.4 or lower or if the encryption is not working, add to following in config/app.php:
-
-```php
-'providers' => array(
-    redsd\AESEncrypt\Database\DatabaseServiceProviderEncrypt::class
-)
+composer require gestazion/aes-encrypt
 ```
 ## Updating Your Eloquent Models
 
@@ -55,14 +32,14 @@ Your models that have encrypted columns, should extend from ModelEncrypt:
 ```php
 namespace App\Models;
 
-use redsd\AESEncrypt\Database\Eloquent\ModelEncrypt;
+use Gestazion\AESEncrypt\Database\Eloquent\ModelEncrypt;
 
 class Person extends ModelEncrypt
 {
     /**
      * The attributes that are encrypted.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $fillableEncrypt = [
         'name'
@@ -75,28 +52,31 @@ class Person extends ModelEncrypt
 It adds new features to Schema which you can use in your migrations:
 
 ```php
-    Schema::create('persons', function (Blueprint $table) {
-        // here you do all columns supported by the schema builder
-        $table->increments('id')->unsigned;
+    Schema::create('persons', static function (Blueprint $table) {
+        // Here you do all columns supported by the schema builder
+        $table->id();
         $table->string('description', 250)->nullable();
         $table->timestamps();
+
+        // This is used to add BLOB type into database
+        $table->binary('name');
     });
 
-    // once the table is created use a raw query to ALTER it and add the BLOB, MEDIUMBLOB or LONGBLOB
+    // once the table is created use a raw query to ALTER it and add the MEDIUMBLOB or LONGBLOB
     DB::statement("ALTER TABLE persons ADD name MEDIUMBLOB after id");
 ```
 
 ## Set encryption settings in .env file
 
 ```php
-APP_AESENCRYPT_KEY=yourencryptedkey
-APP_AESENCRYPT_MODE=aes-256-cbc
+AES_ENCRYPT_KEY=yourencryptedkey
+AES_ENCRYPT_MODE=aes-256-cbc
 ```
 See https://dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_block_encryption_mode for all available encryption methods.
 
 To publish the config file and view run the following command
 ```bash
-php artisan vendor:publish --provider="redsd\AESEncrypt\AesEncryptServiceProvider"
+php artisan vendor:publish --provider="Gestazion\AESEncrypt\AesEncryptServiceProvider"
 ```
 
 

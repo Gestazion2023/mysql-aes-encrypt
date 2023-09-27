@@ -1,10 +1,11 @@
 <?php
 
-namespace redsd\AESEncrypt\Database;
+namespace Gestazion\AESEncrypt\Database;
 
 use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Query\Grammars\Grammar;
 
-class GrammarEncrypt extends \Illuminate\Database\Query\Grammars\Grammar
+class GrammarEncrypt extends Grammar
 {
     /**
      * Compile a select query into SQL.
@@ -15,7 +16,7 @@ class GrammarEncrypt extends \Illuminate\Database\Query\Grammars\Grammar
     public function compileSelect(Builder $query)
     {
         // If the query does not have any columns set, we'll set the columns to the
-        // * character to just get all of the columns from the database. Then we
+        // * character to just get all the columns from the database. Then we
         // can build the query and concatenate all the pieces together as one.
         $original = $query->columns;
         // $columnsEncrypt = $this->columnsEncrypt;
@@ -440,7 +441,7 @@ class GrammarEncrypt extends \Illuminate\Database\Query\Grammars\Grammar
     public function compileInsert(Builder $query, array $values)
     {
         $this->columnsEncrypt = [];
-        if($query instanceof \redsd\AESEncrypt\Database\Query\BuilderEncrypt) {
+        if($query instanceof \Gestazion\AESEncrypt\Database\Query\BuilderEncrypt) {
             $instance = "BuilderEncrypt";
             $this->columnsEncrypt = $query->getfillableEncrypt();
         }

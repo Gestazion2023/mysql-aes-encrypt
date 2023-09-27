@@ -1,5 +1,5 @@
 {
-    "name": "redsd/aesencrypt",
+    "name": "gestazion/aesencrypt",
     "type": "library",
     "description": "Laravel MySql AES Encrypt/Decrypt",
     "keywords": ["laravel","mysql", "aes", "encrypt"],
